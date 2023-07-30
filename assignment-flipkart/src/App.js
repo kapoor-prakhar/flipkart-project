@@ -10,6 +10,9 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currEmail, setEmail] = useState(null);
+  const [filters, setFilters] = useState([]);
+  const [filterList, setFilterList] = useState({})
+  const [filteredData, setFilteredData] = useState([])
 
   useEffect(() => {
     const getData = async () => {
@@ -17,6 +20,7 @@ function App() {
         const fetchedData = await fetchEmailListFromApi();
         console.log("checking data", fetchedData)
         setData(fetchedData?.list);
+        setFilteredData(fetchedData?.list);
         setLoading(false);
       } catch (error) {
         setError(error.message);
@@ -26,9 +30,73 @@ function App() {
 
     getData();
   }, []);
+
+  useEffect(() => {
+    // Check if the 'filterArray' is present in localStorage
+    const storedFilters = JSON.parse(localStorage.getItem('filterArray'));
+    if(data.length ===0) {
+      return
+    }
+
+    if (!storedFilters || Object.keys(storedFilters).length === 0 ) {
+      console.log("checking data", data?.list)
+      // If 'filterArray' is not present or empty, initialize with default values
+      const initialFilters = {
+        unread: !!data && data.map((email) => email.id),
+        read: [],
+        favorites: [],
+      };
+      setFilterList(initialFilters)
+      localStorage.setItem('filterArray', JSON.stringify(initialFilters));
+    } else {
+      setFilterList(storedFilters)
+    }
+  }, [data]);
+
+  const handleFilterClick = (selectedFilter) => {  
+      if (filters.includes(selectedFilter)) {
+        setFilters(filters.filter((filter) => filter !== selectedFilter));
+      } else {
+        setFilters([...filters, selectedFilter]);
+      }
+    
+  };
+
+  useEffect(() => {
+    setFilteredData(
+      filters.length === 0
+        ? data 
+        : data.filter((email) =>
+            filters.every((filter) => filterList[filter].includes(email.id))
+          )
+    ) 
+  }, [filters, data]);
+
   return (
-    <div className='no-overflow'>
-     <h1>Emails</h1>
+    <div>
+     <div className="filter-container">
+      <div className='filter-title'>
+        Filter By: 
+      </div>
+      <div
+            className={`filter ${filters.includes('read') ? 'active' : ''}`}
+            onClick={() => handleFilterClick('read')}
+          >
+            Read
+        </div>
+        <div
+          className={`filter ${filters.includes('unread') ? 'active' : ''}`}
+          onClick={() => handleFilterClick('unread')}
+        >
+          Unread
+        </div>
+        <div
+          className={`filter ${filters.includes('favorites') ? 'active' : ''}`}
+          onClick={() => handleFilterClick('favorites')}
+        >
+          Favorites
+        </div>
+      </div>
       {loading ? (
         <p>Loading data...</p>
       ) : error ? (

@@ -34,3 +34,32 @@
 .email-container > hide {
   display: none;
 }
+
+.filter-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.filter-title {
+padding: 8px;
+color: #636363;
+font-size: 16px;
+font-weight: bold;
+}
+
+.filter {
+  padding: 8px;
+  border-radius: 20px;
+  background-color: transparent;
+  cursor: pointer;
+  color: #636363;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.filter.active {
+  background-color: #E1E4EA;
+  border: none;
+  border: 1px solid #ccc;
+}
