@@ -10,10 +10,13 @@ const EmailDetails = ({
             <div className="card-header">
                 <div className="card-header-content">
                     <span className="name-icon">{senderInitial}</span>
-                    <div>
+                    <div className="subject-line">
                         <h3>{subject}</h3>
                         <span>{date}</span>
                     </div>
+                    <span className="fav-button">
+                        <button>Mark as favourite</button>
+                    </span>
                 </div>
             </div>
             <div className="card-body">
