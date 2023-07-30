@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import {fetchEmailListFromApi} from './helpers/apiService';
+import {fetchEmailDataFromApi, fetchEmailListFromApi} from './helpers/apiService';
 import EmailListItem from './components/email-list-item/email-list-item-component';
+import EmailDetails from './components/email-detail-component/email-detail-component';
 
 
 function App() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currId, setId] = useState(null);
+  const [emailBodyData, setEmailBodyData] = useState("");
+  const [emailLoading, setEmailLoading] = useState(true);
 
 
   useEffect(() => {
@@ -24,6 +28,23 @@ function App() {
 
     getData();
   }, []);
+
+  useEffect(() => {
+    const displayEmail = async () => {
+      if(currId != null) {
+        try {
+          const emailBodyData = await fetchEmailDataFromApi(currId);
+          setEmailBodyData(emailBodyData?.body);
+          setEmailLoading(false);
+        } catch (error) {
+          setError(error.message);
+          setEmailLoading(false);
+        }
+      }
+    };
+
+    displayEmail();
+  }, [currId]);
   return (
     <div>
      <h1>Emails</h1>
@@ -46,6 +67,11 @@ function App() {
           ))}
         </div>
       )}
+      <EmailDetails
+        senderInitial="F"
+        subject="Lorem Ipsum"
+        date={new Date().toDateString()}
+      />
     </div>
   );
 }
