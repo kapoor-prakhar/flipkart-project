@@ -31,6 +31,22 @@ function App() {
     getData();
   }, []);
 
+  const handleClickOnItem = (email) => {
+    setEmail(email);
+    const storedFilters = JSON.parse(localStorage.getItem('filterArray'));
+  const { unread, read, favorites } = storedFilters;
+
+  const updatedFilters = {
+    unread: unread.filter((itemId) => itemId !== email?.id),
+    read: [...read, email?.id],
+    favorites: favorites,
+  };
+
+  localStorage.setItem('filterArray', JSON.stringify(updatedFilters));
+  setFilterList(updatedFilters);
+
+  }
+
   useEffect(() => {
     // Check if the 'filterArray' is present in localStorage
     const storedFilters = JSON.parse(localStorage.getItem('filterArray'));
@@ -72,6 +88,40 @@ function App() {
     ) 
   }, [filters, data]);
 
+  const checkIsFavorite = (id) => {
+    const storedFilters = JSON.parse(localStorage.getItem('filterArray'));
+    if(!storedFilters) {
+      return false
+    }
+    const { favorites } = storedFilters;
+    return favorites.includes(id);
+  }
+
+  const checkIsRead = (id) => {
+    const storedFilters = JSON.parse(localStorage.getItem('filterArray'));
+    if(!storedFilters) {
+      return false
+    }
+    const { read } = storedFilters;
+    return read.includes(id);
+  }
+
+  const addToFavorites = (id) => {
+    console.log("idhr aaya")
+    const storedFilters = JSON.parse(localStorage.getItem('filterArray'));
+  const { favorites } = storedFilters;
+  const updatedFavorites = [...favorites, id];
+
+  const updatedFilters = {
+    unread: storedFilters.unread,
+    read: storedFilters.read,
+    favorites: updatedFavorites,
+  };
+
+  localStorage.setItem('filterArray', JSON.stringify(updatedFilters));
+  setFilterList(updatedFilters);
+  }
+
   return (
     <div>
      <div className="filter-container">
@@ -112,8 +162,9 @@ function App() {
                   subject={email.subject}
                   snippet={email.short_description}
                   timestamp={email.date}
-                  isAddedToFavorite={true}
-                  onClickItem={() => setEmail(email)}
+                  isAddedToFavorite={checkIsFavorite(email?.id)}
+                  onClickItem={() => handleClickOnItem(email)}
+                  isRead={checkIsRead(email?.id)}
                 />
               ))}
           </div>
@@ -121,6 +172,8 @@ function App() {
               <EmailDetails
                 senderInitial="F"
                 emailDesc={currEmail}
+                isFavorite={checkIsFavorite(currEmail?.id)}
+                addToFavorites={()=> addToFavorites(currEmail?.id)}
               />
           </div>
         </div>

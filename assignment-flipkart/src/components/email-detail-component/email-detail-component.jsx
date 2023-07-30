@@ -5,7 +5,9 @@ import { formatTimestamp } from '../../helpers/utils';
 
 const EmailDetails = ({
     senderInitial,
-    emailDesc
+    emailDesc, 
+    isFavorite,
+    addToFavorites
 }) => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -39,7 +41,7 @@ const EmailDetails = ({
                         <span>{formatTimestamp(emailDesc?.date)}</span>
                     </div>
                     <span className="fav-button">
-                        <button>Mark as favourite</button>
+                        <button onClick={addToFavorites}>{isFavorite ? 'Favorite' :'Mark as favourite'}</button>
                     </span>
                 </div>
             </div>
