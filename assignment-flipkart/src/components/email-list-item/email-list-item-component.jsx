@@ -2,7 +2,7 @@ import React from 'react';
 import './email-list-item.style.css'; // Import your CSS file for styling
 
 
-const EmailListItem = ({ sender, fromEmail, subject, snippet, timestamp, isAddedToFavorite }) => {
+const EmailListItem = ({ sender, fromEmail, subject, snippet, timestamp, isAddedToFavorite, onClickItem }) => {
   const senderInitial = sender ? sender[0].toUpperCase() : '';
 
   const formatTimestamp = (timestamp) => {
@@ -17,7 +17,7 @@ const EmailListItem = ({ sender, fromEmail, subject, snippet, timestamp, isAdded
   };
 
   return (
-    <div className="email-card">
+    <div className="email-card" onClick={onClickItem}>
       <div className="initial-circle">{senderInitial}</div>
       <div className="email-details">
         <div className="from-email">From: {fromEmail}</div>
