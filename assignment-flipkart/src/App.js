@@ -1,21 +1,51 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import {fetchEmailListFromApi} from './helpers/apiService';
 import EmailListItem from './components/email-list-item/email-list-item-component';
 
-import EmailListItem from './components/email-list-item/email-list-item-component';
-import EmailDetails from './components/email-detail-component/email-detail-component';
 
 function App() {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const fetchedData = await fetchEmailListFromApi();
+        console.log("checking data", fetchedData)
+        setData(fetchedData?.list);
+        setLoading(false);
+      } catch (error) {
+        setError(error.message);
+        setLoading(false);
+      }
+    };
+
+    getData();
+  }, []);
   return (
     <div>
-     <h1>My Emails</h1>
-      <EmailListItem
-        sender="John Doe"
-        fromEmail="john.doe@example.com"
-        subject="Regarding the upcoming event"
-        snippet="Looking forward to seeing you there!"
-        timestamp="2 days ago"
-      />
+     <h1>Emails</h1>
+      {loading ? (
+        <p>Loading data...</p>
+      ) : error ? (
+        <p>Error: {error}</p>
+      ) : (
+        <div>
+          {data.map((email) => (
+            <EmailListItem
+              key={email.id} // Assuming each email object has a unique 'id' property
+              sender={email?.from?.name}
+              fromEmail={email?.from?.name}
+              subject={email.subject}
+              snippet={email.short_description}
+              timestamp={email.date}
+              isAddedToFavorite={true}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

@@ -4,6 +4,7 @@
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    background-color: #f4f5f9;
   }
   
   .initial-circle {
@@ -13,15 +14,16 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background-color: #007bff; /* You can customize the background color */
+    background-color: #e54065; /* You can customize the background color */
     color: white;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 14px;
     margin-right: 10px;
   }
   
   .email-details {
     flex: 1;
+    color: #636363;
   }
   
   .from-email {
@@ -41,5 +43,12 @@
   .timestamp {
     color: #777;
     font-size: 12px;
+  }
+
+  .favorite-text {
+    color: #E54065; /* You can customize the color of the favorite text */
+    font-size: 12px;
+    margin-left: 10px;
+    font-weight: bold;
   }
   
