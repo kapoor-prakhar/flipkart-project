@@ -27,15 +27,15 @@ function App() {
     getData();
   }, []);
   return (
-    <div>
+    <div className='no-overflow'>
      <h1>Emails</h1>
       {loading ? (
         <p>Loading data...</p>
       ) : error ? (
         <p>Error: {error}</p>
       ) : (
-        <div className='email-container'>
-          <div className={currEmail == null ? '' : 'col-2'}>
+        <div className={currEmail == null ? 'email-container full-width' : 'email-container clipped'}>
+          <div className={currEmail == null ? 'col-10' : 'col-2'}>
               {data.map((email) => (
                 <EmailListItem
                   key={email.id} // Assuming each email object has a unique 'id' property
