@@ -1,26 +1,19 @@
 import logo from './logo.svg';
 import './App.css';
-import EmailDetails from './components/email-detail-component/email-detail-component';
+import EmailListItem from './components/email-list-item/email-list-item-component';
 
 function App() {
   return (
-    // <div className="App">
-    //   <header className="App-header">
-    //     <img src={logo} className="App-logo" alt="logo" />
-    //     <p>
-    //       Edit <code>src/App.js</code> and save to reload.
-    //     </p>
-    //     <a
-    //       className="App-link"
-    //       href="https://reactjs.org"
-    //       target="_blank"
-    //       rel="noopener noreferrer"
-    //     >
-    //       Learn React
-    //     </a>
-    //   </header>
-    // </div>
-    <EmailDetails senderInitial={"F"} subject={"Lorem Ipsum"} date={"26/10/20 10:30am"}/>
+    <div>
+     <h1>My Emails</h1>
+      <EmailListItem
+        sender="John Doe"
+        fromEmail="john.doe@example.com"
+        subject="Regarding the upcoming event"
+        snippet="Looking forward to seeing you there!"
+        timestamp="2 days ago"
+      />
+    </div>
   );
 }
 
