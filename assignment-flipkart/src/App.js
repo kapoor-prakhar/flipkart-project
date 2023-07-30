@@ -2,6 +2,9 @@ import logo from './logo.svg';
 import './App.css';
 import EmailListItem from './components/email-list-item/email-list-item-component';
 
+import EmailListItem from './components/email-list-item/email-list-item-component';
+import EmailDetails from './components/email-detail-component/email-detail-component';
+
 function App() {
   return (
     <div>
