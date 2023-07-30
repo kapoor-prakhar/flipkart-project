@@ -104,7 +104,7 @@ function App() {
       ) : (
         <div className={currEmail == null ? 'email-container full-width' : 'email-container clipped'}>
           <div className={currEmail == null ? 'col-10' : 'col-2'}>
-              {data.map((email) => (
+              {filteredData.map((email) => (
                 <EmailListItem
                   key={email.id} // Assuming each email object has a unique 'id' property
                   sender={email?.from?.name}
