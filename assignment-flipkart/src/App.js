@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import {fetchEmailDataFromApi, fetchEmailListFromApi} from './helpers/apiService';
+import {fetchEmailListFromApi} from './helpers/apiService';
+import './App.css';
 import EmailListItem from './components/email-list-item/email-list-item-component';
 import EmailDetails from './components/email-detail-component/email-detail-component';
 
@@ -8,10 +9,7 @@ function App() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [currId, setId] = useState(null);
-  const [emailBodyData, setEmailBodyData] = useState("");
-  const [emailLoading, setEmailLoading] = useState(true);
-
+  const [currEmail, setEmail] = useState(null);
 
   useEffect(() => {
     const getData = async () => {
@@ -28,23 +26,6 @@ function App() {
 
     getData();
   }, []);
-
-  useEffect(() => {
-    const displayEmail = async () => {
-      if(currId != null) {
-        try {
-          const emailBodyData = await fetchEmailDataFromApi(currId);
-          setEmailBodyData(emailBodyData?.body);
-          setEmailLoading(false);
-        } catch (error) {
-          setError(error.message);
-          setEmailLoading(false);
-        }
-      }
-    };
-
-    displayEmail();
-  }, [currId]);
   return (
     <div>
      <h1>Emails</h1>
@@ -53,25 +34,29 @@ function App() {
       ) : error ? (
         <p>Error: {error}</p>
       ) : (
-        <div>
-          {data.map((email) => (
-            <EmailListItem
-              key={email.id} // Assuming each email object has a unique 'id' property
-              sender={email?.from?.name}
-              fromEmail={email?.from?.name}
-              subject={email.subject}
-              snippet={email.short_description}
-              timestamp={email.date}
-              isAddedToFavorite={true}
-            />
-          ))}
+        <div className='email-container'>
+          <div className={currEmail == null ? '' : 'col-2'}>
+              {data.map((email) => (
+                <EmailListItem
+                  key={email.id} // Assuming each email object has a unique 'id' property
+                  sender={email?.from?.name}
+                  fromEmail={email?.from?.name}
+                  subject={email.subject}
+                  snippet={email.short_description}
+                  timestamp={email.date}
+                  isAddedToFavorite={true}
+                  onClickItem={() => setEmail(email)}
+                />
+              ))}
+          </div>
+          <div className={currEmail == null ? '' : 'col-8'}>
+              <EmailDetails
+                senderInitial="F"
+                emailDesc={currEmail}
+              />
+          </div>
         </div>
       )}
-      <EmailDetails
-        senderInitial="F"
-        subject="Lorem Ipsum"
-        date={new Date().toDateString()}
-      />
     </div>
   );
 }
